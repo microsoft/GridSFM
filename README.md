@@ -1,23 +1,31 @@
 # GridSFM
 
-GridSFM is an open-source framework for neural surrogate modeling of AC
-Optimal Power Flow (AC-OPF) on realistic approximations of the US power grids, derived exclusively from open data. It provides
-tooling to obtain grid data, process raw topologies into solved AC-OPF
-scenarios, and (coming soon) load and run pre-trained surrogate models for
-fast AC-OPF estimation.
+GridSFM is an open-source framework for AC Optimal Power Flow (AC-OPF),
+the optimization that determines the cost-minimizing generator dispatch
+satisfying all of a power grid's physical and operational constraints.
+The framework has two parts:
 
-Model checkpoints and power grid datasets are available on HuggingFace:
-[microsoft/gridsfm](https://huggingface.co/collections/microsoft/gridsfm).
-Use the instructions below to install our loaders and facilitate data loading.
+- **`power_grid/`** is the data pipeline. It turns grid topologies
+  into solved AC-OPF scenarios in `.pyg.json` format, and ships a Hugging Face loader for fetching pre-built
+  scenarios.
+- **`model/`** loads the released GridSFM neural surrogate and runs fast
+  AC-OPF inference on those `.pyg.json` scenarios. 
+
+Model checkpoints and pre-built power-grid datasets are hosted on
+Hugging Face: [microsoft/gridsfm](https://huggingface.co/collections/microsoft/gridsfm).
 
 
 ## Repository structure
 
 ```
 GridSFM/
-├── model/              # Neural surrogate model loading & inference [Coming soon]
+├── model/                  # Neural surrogate model loading & inference
+│   ├── gridsfm/            # inference package (model, transforms, helpers)
+│   ├── samples/            # 53 base scenarios (.pyg.json); see samples/README.md
+│   ├── examples/           # infer_samples, opfdata
+│   └── tests/              # pytest suite
 └── power_grid/
-    ├── hf_util/        # HuggingFace dataset loader
+    ├── hf_util/            # HuggingFace dataset loader
     └── US/
         ├── topology_solver_pipeline/   # Raw topology → solved scenarios
         └── viewer/                     # Browser-based grid data viewer
@@ -25,10 +33,15 @@ GridSFM/
 
 ## `model/` — Neural surrogate models
 
-**[Coming soon]** — This directory will contain code and documentation for loading
-and running GridSFM neural surrogate models for AC-OPF estimation on power
-grids. Details will be added once the model artifacts and inference code are
-available.
+> **Tested OS:** Ubuntu 22.04 / 24.04.
+
+### Typical workflow
+
+1. **[Install](model/README.md#install)** — `cd model && python -m venv .venv && source .venv/bin/activate && pip install -e .`
+2. **[Get the checkpoint](model/README.md#get-the-checkpoint)** — `load_from_hf("microsoft/GridSFM_Open")` or download once with `hf download`.
+3. **[Run inference](model/README.md#quickstart)** — single-graph via `predict(model, scenario)`, or batched via `model(batch)`. Examples for shipped samples (`examples/infer_samples.py`) and the [OPFData](https://arxiv.org/abs/2406.07234) dataset (`examples/opfdata.py`).
+
+See [model/README.md](model/README.md) for install, checkpoint download, output schema, the column conventions in `gridsfm/schema.py`, and cache customization for large N-1 sweeps.
 
 ## `power_grid/` — Grid data and processing pipeline
 
@@ -100,6 +113,15 @@ If you use the power grid data or pipeline, please cite:
 }
 ```
 
-## License
+If you use the GridSFM neural surrogate model (`model/`), please cite:
 
-This project is licensed under the [MIT License](LICENSE).
+<!-- TODO: replace with the GridSFM model paper bibtex once the paper is public. -->
+
+```bibtex
+@article{TODO_gridsfm_model,
+  title   = {TODO: GridSFM model paper title},
+  author  = {TODO},
+  year    = {TODO},
+  note    = {Microsoft Research, citation to be added upon publication}
+}
+```
