@@ -44,7 +44,7 @@ dependencies = [
 
 [project.optional-dependencies]
 test = [
-    "pytest>=7,<9",
+    "pytest>=7,<10",
 ]
 notebook = [
     "matplotlib>=3.7,<4",
