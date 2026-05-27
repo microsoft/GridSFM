@@ -39,7 +39,7 @@ dependencies = [
     "torch_geometric>=2.5,<3",
     "numpy>=1.24,<3",
     "scipy>=1.10,<2",
-    "huggingface_hub>=0.34,<1",
+    "huggingface_hub>=0.34,<2",
 ]
 
 [project.optional-dependencies]
