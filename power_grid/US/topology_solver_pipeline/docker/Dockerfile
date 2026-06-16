@@ -25,7 +25,7 @@
 # =============================================================================
 
 # --- Base image: Julia 1.11 on Debian bookworm ---
-FROM julia:1.11-bookworm
+FROM julia:1.12-bookworm
 
 LABEL maintainer="Microsoft Research"
 LABEL description="topology_solver_pipeline — power grid topology to OPF-solved gridSFM scenarios"
